@@ -19,7 +19,7 @@ const FootballScores = () => {
           throw new Error(`HTTP error! Status: ${teamResponse.status}`);
         }
         const teamData = await teamResponse.json();
-        const team = teamData.teams[0]; // Get the first team that matches
+        const team = teamData.teams[0]; 
 
         if (!team) {
           throw new Error("Team not found");
@@ -34,7 +34,7 @@ const FootballScores = () => {
           throw new Error(`HTTP error! Status: ${eventsResponse.status}`);
         }
         const eventsData = await eventsResponse.json();
-        setScores(eventsData.results); // Set the scores
+        setScores(eventsData.results);
 
       } catch (err) {
         setError(err.message);
@@ -44,7 +44,7 @@ const FootballScores = () => {
     };
 
     fetchTeamData();
-  }, [teamName]); // Re-run the effect when teamName changes
+  }, [teamName]); 
 
   const handleTeamChange = (e) => {
     setTeamName(e.target.value);
@@ -64,12 +64,10 @@ const FootballScores = () => {
             placeholder="Enter team name"
             className="form-control my-3"
           />
-
-          {/* Loading and error messages */}
           {loading && <p>Loading football scores...</p>}
           {error && <p>Error: {error}</p>}
 
-          {/* Scores section */}
+          
           {!loading && !error && (
             <div className="cards" style={{ backgroundColor: 'lightgray', padding: '20px' }}>
               {scores.map((event, index) => (
@@ -86,10 +84,8 @@ const FootballScores = () => {
                       <span>{event.strHomeTeam}</span>
                     </div>
                     
-                    {/* Score */}
+                  
                     <h2 className="mx-3">vs</h2>
-                    
-                    {/* Away team */}
                     <div className="d-flex align-items-center">
                       <span>{event.strAwayTeam}</span>
                       <img 

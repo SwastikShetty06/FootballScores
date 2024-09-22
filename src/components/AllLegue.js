@@ -45,7 +45,7 @@ const AllLeague = () => {
                         <li key={league.idLeague} style={{ marginBottom: '20px' }}>
                             <Link to={`/league/${league.strLeague}`} style={{ textDecoration: 'none' }}>
                                 <button style={{ width: '40%' }}>
-                                    <h2>{league.strLeague}</h2>
+                                    <h4>{league.strLeague}</h4>
                                 </button>
                             </Link>
                         </li>

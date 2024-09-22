@@ -55,7 +55,7 @@ const AllTeam = () => {
                         alt={team.strTeam}
                         style={{ width: '50px', height: '50px', marginRight: '10px' }}
                         />
-                        <h2>{team.strTeam}</h2>
+                        <h4>{team.strTeam}</h4>
                     </li>
                 </button>
             </Link>
