@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const TeamData = () => {
     const { teamName } = useParams();  
@@ -42,7 +43,10 @@ const TeamData = () => {
             <center>
                 <h1>{teamName}</h1>
                 {team && (
-                    <div style={{ width: '35%' }} className="cards">
+                    <Container>
+                    <Row className="justify-content-center">
+                        <Col xs={25} md={8} lg={6}>
+                        <div className="cards" style={{ backgroundColor: 'lightgray', padding: '20px' }}>
                         <div>
                             {scores.length > 0 ? (
                                 scores.map((event, index) => (
@@ -71,7 +75,10 @@ const TeamData = () => {
                                 <p>No recent matches found.</p>  
                             )}
                         </div>
-                    </div>
+                        </div>
+                        </Col>
+                    </Row>
+                    </Container>
                 )}
             </center>
         </div>
