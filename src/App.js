@@ -5,11 +5,13 @@ import TeamData from './components/TeamData';
 import AllCountry from "./components/AllCountry";
 import AllLeague from "./components/AllLegue";
 import FootballScores from './components/FootballScores';  
+import Footer from './components/footer'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 function App() {
   return (
+    <div>
     <Router>
       <div>
         <nav style={{ padding: '10px', background: '#333', color: '#fff', textAlign: 'center' }}>
@@ -22,8 +24,11 @@ function App() {
           <Route path="/team/:teamName" element={<TeamData />} />
           <Route path="/football-scores" element={<FootballScores />} /> 
         </Routes>
+        
       </div>
     </Router>
+    <Footer />
+    </div>
   );
 }
 
