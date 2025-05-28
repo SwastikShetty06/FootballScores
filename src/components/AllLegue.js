@@ -39,7 +39,7 @@ const AllLeague = () => {
     return (
         <div>
             <center>
-                <h1>Top Soccer Leagues</h1>
+                <h1>Top Football Leagues</h1>
                 <ul style={{ listStyleType: 'none', padding: 0 }}>
                     {leagues.map((league) => (
                         <li key={league.idLeague} style={{ marginBottom: '20px' }}>
