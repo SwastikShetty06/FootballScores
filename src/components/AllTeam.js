@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import TeamData from './TeamData';
 import { Link, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const AllTeam = () => {
     const [teams, setTeams] = useState([]);  
@@ -28,40 +28,50 @@ const AllTeam = () => {
         };
 
         fetchTeams(); 
-    }, []);
+    }, [leagueName]);
 
     if (loading) {
-        return <h2>Loading...</h2>;  
+        return <div className="loading-text">⚽ Loading teams...</div>;  
     }
 
     if (error) {
-        return <h2>Error: {error}</h2>; 
+        return <div className="error-text">❌ Error loading teams</div>; 
     }
 
     return (
-        <div>
-        <center>
-        <h1>{leagueName}</h1>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {teams.map((team) => (
-            <Link to={`/team/${team.strTeam}`} key={team.idTeam} style={{ textDecoration: 'none' }}>
-                <button style={{ width: '35%' }}>
-                    <li key={team.idTeam} style={{ marginBottom: '10px' }}>
-                        <TeamData 
-                            teamName={team.strTeam}
-                        />
-                        <img
-                        src={team.strBadge}
-                        alt={team.strTeam}
-                        style={{ width: '50px', height: '50px', marginRight: '10px' }}
-                        />
-                        <h4>{team.strTeam}</h4>
-                    </li>
-                </button>
-            </Link>
-            ))}
-        </ul>
-        </center>
+        <div className="fade-in">
+            <div className="text-center">
+                <h1 className="page-title">🏟️ {leagueName}</h1>
+                <div className="cards">
+                    {teams && teams.map((team, index) => (
+                        <motion.div 
+                            key={team.idTeam} 
+                            className="team-card-wrapper"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                            whileHover={{ 
+                                scale: 1.05,
+                                transition: { duration: 0.3 }
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Link to={`/team/${team.strTeam}`} style={{ textDecoration: 'none' }}>
+                                <div className="team-card">
+                                    <div className="team-card-content">
+                                        <img
+                                            src={team.strBadge}
+                                            alt={team.strTeam}
+                                            className="team-logo"
+                                        />
+                                        <h4 className="team-name">{team.strTeam}</h4>
+                                    </div>
+                                </div>
+                            </Link>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
