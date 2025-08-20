@@ -16,7 +16,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--dark-navy) 0%, #1e293b 25%, #334155 50%, #475569 75%, var(--primary-indigo) 100%);
+  background: transparent;
   font-family: 'Inter', 'Poppins', sans-serif;
   position: relative;
   overflow-x: hidden;

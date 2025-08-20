@@ -4,6 +4,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import AllTeam from './components/AllTeam';
 import TeamData from './components/TeamData';
+import ThreeBackground from './components/ThreeBackground';
 import AllCountry from "./components/AllCountry";
 import AllLeague from "./components/AllLegue";
 import FootballScores from './components/FootballScores';  
@@ -82,29 +83,30 @@ const AnimatedPage = ({ children }) => {
   );
 };
 
+
 function App() {
   const location = useLocation();
-  
   return (
-    <div className="App">
+    <motion.div className="App" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <ThreeBackground />
       <div className="app-container">
         <NavigationBar />
-        
         <main className="main-content">
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<AnimatedPage><AllLeague /></AnimatedPage>} />
               <Route path="/league/:leagueName" element={<AnimatedPage><AllTeam /></AnimatedPage>} />
               <Route path="/team/:teamName" element={<AnimatedPage><TeamData /></AnimatedPage>} />
-              <Route path="/football-scores" element={<AnimatedPage><FootballScores /></AnimatedPage>} /> 
+              <Route path="/football-scores" element={<AnimatedPage><FootballScores /></AnimatedPage>} />
             </Routes>
           </AnimatePresence>
         </main>
       </div>
       <Footer />
-    </div>
+    </motion.div>
   );
 }
+// ...existing code...
 
 // Wrapper to provide Router context
 function AppWrapper() {

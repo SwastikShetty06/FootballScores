@@ -29,28 +29,32 @@ const AllCountry = () => {
     }, []);
 
     if (loading) {
-        return <h2>Loading...</h2>;  
+        return <div className="loading-text">🌍 Loading countries...</div>;
     }
 
     if (error) {
-        return <h2>Error: {error}</h2>; 
+        return <div className="error-text">❌ Error: {error}</div>;
     }
 
     return (
-        <div>
-        <center>
-        <h1>All Countries</h1>
-            {countries.map((country) => (
-                    <button style={{ width: '20%' }}>
-                        <img
-                            src={country.flag_url_32} 
-                            alt={country.name}
-                            style={{ width: '50px', height: '50px', marginRight: '10px' }}
-                        />
-                        <h2>{country.name_en}</h2>
-                    </button>
-            ))}
-        </center>
+        <div className="fade-in">
+            <div className="text-center">
+                <h1 className="page-title">🌍 All Countries</h1>
+                <div className="cards">
+                    {countries.map((country, idx) => (
+                        <div key={country.name_en} className="league-card-wrapper">
+                            <div className="league-card" style={{ minHeight: 120, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                <img
+                                    src={country.flag_url_32}
+                                    alt={country.name_en}
+                                    style={{ width: '48px', height: '48px', borderRadius: '50%', marginBottom: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                                />
+                                <h4 className="league-name" style={{ fontSize: '1.1rem', margin: 0 }}>{country.name_en}</h4>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
