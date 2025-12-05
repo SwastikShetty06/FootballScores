@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 
 const FootballScores = () => {
-  const [teamName, setTeamName] = useState("Arsenal"); 
+  const [teamName, setTeamName] = useState("Arsenal");
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,14 +20,14 @@ const FootballScores = () => {
           throw new Error(`HTTP error! Status: ${teamResponse.status}`);
         }
         const teamData = await teamResponse.json();
-        const team = teamData.teams[0]; 
 
-        if (!team) {
+        if (!teamData.teams || teamData.teams.length === 0) {
           throw new Error("Team not found");
         }
 
+        const team = teamData.teams[0];
         const teamId = team.idTeam;
-        
+
         const eventsResponse = await fetch(
           `https://www.thesportsdb.com/api/v1/json/3/eventslast.php?id=${teamId}`
         );
@@ -35,17 +35,22 @@ const FootballScores = () => {
           throw new Error(`HTTP error! Status: ${eventsResponse.status}`);
         }
         const eventsData = await eventsResponse.json();
-        setScores(eventsData.results);
+        setScores(eventsData.results || []);
 
       } catch (err) {
         setError(err.message);
+        setScores([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTeamData();
-  }, [teamName]); 
+    const timeoutId = setTimeout(() => {
+      if (teamName) fetchTeamData();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [teamName]);
 
   const handleTeamChange = (e) => {
     setTeamName(e.target.value);
@@ -59,102 +64,81 @@ const FootballScores = () => {
             <h1 className="page-title">🔍 Football Team Search</h1>
 
             {/* Enhanced search input */}
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="search-container"
-            >
-              <div className="search-icon">🔍</div>
+            <div className="search-wrapper mb-5">
+              <i className="fas fa-search search-icon">🔍</i>
               <input
                 type="text"
+                className="search-input"
+                placeholder="Enter team name (e.g., Arsenal, Barcelona)"
                 value={teamName}
                 onChange={handleTeamChange}
-                placeholder="Enter team name (e.g., Arsenal, Barcelona)"
-                className="search-input-enhanced form-control"
               />
-            </motion.div>
-            
-            {loading && <div className="loading-text">⚽ Loading team data...</div>}
-            {error && <div className="error-text">❌ Error: {error}</div>}
+            </div>
+
+            {loading && (
+              <div className="text-center">
+                <div className="loading-spinner"></div>
+                <p className="text-muted mt-3">Searching...</p>
+              </div>
+            )}
+
+            {error && teamName && !loading && (
+              <div className="text-center text-danger">
+                <p>{error === "Team not found" ? "Team not found. Try another name." : error}</p>
+              </div>
+            )}
 
             {!loading && !error && scores && scores.length > 0 && (
               <div>
-                <h3 style={{ 
-                  marginBottom: '30px', 
-                  color: 'var(--soft-white)', 
-                  fontSize: '1.8rem',
-                  fontWeight: '700',
-                  textAlign: 'center',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
-                }}>Recent Matches for {teamName}</h3>
-                <div className="match-results-container">
-                {scores.map((event, index) => {
-                  // Determine match result for the searched team
-                  const getMatchResult = () => {
-                    const homeScore = parseInt(event.intHomeScore);
-                    const awayScore = parseInt(event.intAwayScore);
-                    const isHomeTeam = event.strHomeTeam.toLowerCase().includes(teamName.toLowerCase());
-                    
-                    if (homeScore === awayScore) return 'draw';
-                    if ((isHomeTeam && homeScore > awayScore) || (!isHomeTeam && awayScore > homeScore)) {
-                      return 'win';
-                    }
-                    return 'loss';
-                  };
-                  
-                  return (
-                    <motion.div 
-                      key={index} 
-                      className={`match-container ${getMatchResult()}`}
-                      initial={{ opacity: 0, y: 30 }}
+                <h3 className="text-white mb-4">Recent Matches for {teamName}</h3>
+                <div className="d-flex flex-column gap-4">
+                  {scores.map((event, index) => (
+                    <motion.div
+                      key={index}
+                      className="glass-card p-4"
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
-                      whileHover={{ y: -8, scale: 1.02 }}
+                      transition={{ delay: index * 0.1 }}
                     >
-                    <div className="match-date">📅 {new Date(event.dateEvent).toLocaleDateString('en-US', {
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}</div>
-                    
-                    <div className="team-vs-container">
-                      {/* Home team */}
-                      <div className="team-info">
-                        <img 
-                          src={event.strHomeTeamBadge} 
-                          alt={`${event.strHomeTeam} logo`}
-                          className="team-logo"
-                        />
-                        <span style={{ fontWeight: '600', fontSize: '1.1rem' }}>{event.strHomeTeam}</span>
+                      <div className="row align-items-center text-center">
+                        <div className="col-md-4 mb-3 mb-md-0">
+                          <div className="d-flex align-items-center justify-content-center justify-content-md-end gap-3">
+                            <span className="h5 mb-0 text-white">{event.strHomeTeam}</span>
+                            {event.strHomeTeamBadge && (
+                              <img src={event.strHomeTeamBadge} alt="" width="40" />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="col-md-4 mb-3 mb-md-0">
+                          <div className="d-flex flex-column align-items-center">
+                            <div className="h2 mb-1 text-primary fw-bold">
+                              {event.intHomeScore} - {event.intAwayScore}
+                            </div>
+                            <small className="text-muted">
+                              {new Date(event.dateEvent).toLocaleDateString()}
+                            </small>
+                          </div>
+                        </div>
+
+                        <div className="col-md-4">
+                          <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+                            {event.strAwayTeamBadge && (
+                              <img src={event.strAwayTeamBadge} alt="" width="40" />
+                            )}
+                            <span className="h5 mb-0 text-white">{event.strAwayTeam}</span>
+                          </div>
+                        </div>
                       </div>
-                      
-                      <div className="vs-text">VS</div>
-                      
-                      <div className="team-info">
-                        <span style={{ fontWeight: '600', fontSize: '1.1rem' }}>{event.strAwayTeam}</span>
-                        <img
-                          src={event.strAwayTeamBadge}
-                          alt={`${event.strAwayTeam} logo`}
-                          className="team-logo"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="match-score">
-                      ⚽ Final Score: {event.intHomeScore} - {event.intAwayScore}
-                    </div>
-                  </motion.div>
-                  );
-                })}
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             )}
-            
-            {!loading && !error && (!scores || scores.length === 0) && (
-              <div className="cards">
-                <p style={{ color: '#666', fontSize: '1.1rem' }}>No recent matches found for "{teamName}". Try searching for another team!</p>
+
+            {!loading && !error && (!scores || scores.length === 0) && teamName && (
+              <div className="text-center text-muted mt-4">
+                <p>No recent matches found for "{teamName}".</p>
               </div>
             )}
           </Col>

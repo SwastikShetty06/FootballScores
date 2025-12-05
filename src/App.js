@@ -17,7 +17,7 @@ const NavigationBar = () => {
   const location = useLocation();
   
   return (
-    <Navbar className="glassmorphism-navbar fixed-top" variant="dark" expand="lg">
+    <Navbar className="glass-navbar fixed-top" variant="dark" expand="lg">
       <Container>
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -28,40 +28,34 @@ const NavigationBar = () => {
               initial={{ rotate: 0 }}
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              style={{ display: 'inline-block' }}
+              style={{ display: 'inline-block', marginRight: '0.5rem' }}
             >
               ⚽
             </motion.span>
-            <span className="ms-2">FootballScores</span>
+            FootballScores
           </Navbar.Brand>
         </motion.div>
         
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-              <Nav.Link 
-                as={Link} 
-                to="/" 
-                className={`nav-link-enhanced ${location.pathname === '/' ? 'active' : ''}`}
-                aria-label="View all football leagues"
-              >
-                <span className="nav-icon">🏆</span>
-                <span>All Leagues</span>
-              </Nav.Link>
-            </motion.div>
+          <Nav className="ms-auto gap-2">
+            <Nav.Link 
+              as={Link} 
+              to="/" 
+              className={`nav-link-custom ${location.pathname === '/' ? 'active' : ''}`}
+            >
+              <span className="me-2">🏆</span>
+              All Leagues
+            </Nav.Link>
             
-            <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-              <Nav.Link 
-                as={Link} 
-                to="/football-scores" 
-                className={`nav-link-enhanced ${location.pathname === '/football-scores' ? 'active' : ''}`}
-                aria-label="Search for football teams"
-              >
-                <span className="nav-icon">🔍</span>
-                <span>Search Team</span>
-              </Nav.Link>
-            </motion.div>
+            <Nav.Link 
+              as={Link} 
+              to="/football-scores" 
+              className={`nav-link-custom ${location.pathname === '/football-scores' ? 'active' : ''}`}
+            >
+              <span className="me-2">🔍</span>
+              Search Team
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
