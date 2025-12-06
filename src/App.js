@@ -7,15 +7,15 @@ import TeamData from './components/TeamData';
 import ThreeBackground from './components/ThreeBackground';
 import AllCountry from "./components/AllCountry";
 import AllLeague from "./components/AllLegue";
-import FootballScores from './components/FootballScores';  
+import FootballScores from './components/FootballScores';
 import Footer from './components/footer'
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import "./App.css";
 
 // Navigation component with active link detection
 const NavigationBar = () => {
   const location = useLocation();
-  
+
   return (
     <Navbar className="glass-navbar fixed-top" variant="dark" expand="lg">
       <Container>
@@ -35,22 +35,22 @@ const NavigationBar = () => {
             FootballScores
           </Navbar.Brand>
         </motion.div>
-        
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto gap-2">
-            <Nav.Link 
-              as={Link} 
-              to="/" 
+            <Nav.Link
+              as={Link}
+              to="/"
               className={`nav-link-custom ${location.pathname === '/' ? 'active' : ''}`}
             >
               <span className="me-2">🏆</span>
               All Leagues
             </Nav.Link>
-            
-            <Nav.Link 
-              as={Link} 
-              to="/football-scores" 
+
+            <Nav.Link
+              as={Link}
+              to="/football-scores"
               className={`nav-link-custom ${location.pathname === '/football-scores' ? 'active' : ''}`}
             >
               <span className="me-2">🔍</span>
